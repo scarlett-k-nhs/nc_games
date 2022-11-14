@@ -1,4 +1,5 @@
-const {fetchCategories} = require("../models/games.models");
+const {fetchCategories,
+       fetchReviews} = require("../models/games.models");
 
 exports.getCategories = (req, res, next) => {
 
@@ -8,3 +9,13 @@ exports.getCategories = (req, res, next) => {
         next(err);
     });
 };
+
+exports.getReviews = (req, res, next) => {
+
+    fetchReviews().then((reviews) => {
+        console.log(reviews)
+        res.send({reviews});
+    }).catch((err) => {
+        next(err);
+    });
+}

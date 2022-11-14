@@ -12,3 +12,5 @@ To set-up this repo, you will need to create two enviroment files.
 * An '.env.test' file with PGDATABASE = nc_games_test.
 
 ## GET /api/categories
+
+This function gets an array of category objects with a slug and description property.

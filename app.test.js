@@ -32,7 +32,7 @@ describe('getCategories', () => {
             expect(body.categories).toEqual(expect.any(Array));
           });
       });
-      test("Responds with castegory objects with correct properties", () => {
+      test("Responds with category objects with correct properties", () => {
         return request(app)
           .get("/api/categories")
           .expect(200)
@@ -46,4 +46,38 @@ describe('getCategories', () => {
             })
           });
       });
+})
+
+describe('getReviews', () => {
+  test("Responds with an object containing an array of review objects", () => {
+      return request(app)
+        .get("/api/reviews")
+        .expect(200)
+        .then(({body}) => {
+          expect(body.reviews).toEqual(expect.any(Array));
+        });
+    });
+    test("Responds with review objects with correct properties", () => {
+      return request(app)
+        .get("/api/reviews")
+        .expect(200)
+        .then(({body}) => {
+          expect(body.reviews.length).toBeGreaterThanOrEqual(0);
+          body.reviews.forEach((review) => {
+              expect(review).toMatchObject({
+                  review_id: expect.any(Number),
+                  title: expect.any(String),
+                 
+              })
+          })
+        });
+    });
+    test("Responds with review objects ordered by date in descending", () => {
+      return request(app)
+        .get("/api/reviews")
+        .expect(200)
+        .then(({body}) => {
+          expect(body.reviews).toBeSortedBy('created_at', {descending: true});
+        });
+    });
 })
