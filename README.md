@@ -11,3 +11,4 @@ To set-up this repo, you will need to create two enviroment files.
 * An '.env.development' file with PGDATABASE = nc_games.
 * An '.env.test' file with PGDATABASE = nc_games_test.
 
+## GET /api/categories
