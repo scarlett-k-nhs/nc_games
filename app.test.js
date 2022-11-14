@@ -67,7 +67,13 @@ describe('getReviews', () => {
               expect(review).toMatchObject({
                   review_id: expect.any(Number),
                   title: expect.any(String),
-                 
+                  designer: expect.any(String),
+                  owner: expect.any(String),
+                  review_img_url: expect.any(String),
+                  category: expect.any(String),
+                  created_at: expect.any(String),
+                  votes: expect.any(Number),
+                  comment_count: expect.any(Number)
               })
           })
         });
@@ -81,3 +87,4 @@ describe('getReviews', () => {
         });
     });
 })
+
