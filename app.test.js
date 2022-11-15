@@ -169,6 +169,50 @@ describe('postComment', () => {
         expect(body.msg).toBe('Invalid review id given')
       });
   });
-  
+
+  test('check that the keys needed in the object are given', () => {
+    
+    const testComment = {
+      username:'mallionaire'
+    }
+    
+    return request(app)
+    .post("/api/reviews/1/comments")
+    .send(testComment)
+    .expect(400)
+      .then(({body}) => {
+        expect(body.msg).toBe('bad request as keys are missing')
+      });
+  })
+  test('check that the keys are the correct datatype', () => {
+    
+    const testComment = {
+      username: 'mallionaire',
+      body: 5
+    }
+    
+    return request(app)
+    .post("/api/reviews/1/comments")
+    .send(testComment)
+    .expect(404)
+      .then(({body}) => {
+        expect(body.msg).toBe('information given by the object is not the right data type')
+      });
+  })
+  test("provides error when username given doesn't exist", () => {
+    
+    const testComment = {
+      username: 'testa',
+      body: 'some commennt'
+    }
+    
+    return request(app)
+    .post("/api/reviews/1/comments")
+    .send(testComment)
+    .expect(404)
+      .then(({body}) => {
+        expect(body.msg).toBe('Invalid username given')
+      });
+  })
   
 })
