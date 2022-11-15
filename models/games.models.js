@@ -8,3 +8,50 @@ exports.fetchCategories = () => {
         return categories.rows;
     })
 }
+
+exports.fetchReviews = () => {
+
+    return db.query(`
+    SELECT 
+        reviews.review_id as review_id,
+        reviews.title as title,
+        reviews.designer as designer,
+        reviews.owner as owner,
+        reviews.review_img_url AS review_img_url,
+        reviews.review_body AS body,
+        reviews.category AS category,
+        reviews.created_at AS created_at,
+        reviews.votes as votes,
+        COUNT(comments.review_id) AS comment_count
+    FROM reviews
+    INNER JOIN comments
+    ON comments.review_id = reviews.review_id
+    GROUP BY reviews.review_id
+    ORDER BY reviews.created_at DESC;
+
+    `).then((reviews) => {
+        
+        return reviews.rows.map((review) => {
+            review.comment_count = Number(review.comment_count),
+            review.created_at = Date(review.created_at)
+        })
+    })
+}
+
+// exports.fetchReviewsById = (review_id) => {
+
+//     return db.query(`
+//         SELECT * FROM reviews
+//         WHERE review_id = $1;
+//     `, [review_id]).then((reviews) => {
+
+//         if (reviews.rows.length === 0){
+//             return Promise.reject({
+//                 status: 400,
+//                 msg:"Invalid review id given"
+//             })
+//         } else {
+//             return reviews.rows[0]
+//         }
+//     })
+// }
