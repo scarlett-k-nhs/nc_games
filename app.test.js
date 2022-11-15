@@ -136,7 +136,7 @@ describe('getCommentsByReviewId', () => {
         })
     });
   })
-  test('get an arempty array when no comments exist', () => {
+  test('get an empty array when no comments exist', () => {
     return request(app)
       .get("/api/reviews/1/comments")
       .expect(200)
@@ -160,4 +160,88 @@ describe('getCommentsByReviewId', () => {
         expect(body.msg).toBe('Invalid review id given')
       });
   });
+});
+
+describe('patchReviewById', () => {
+  test('votes remain the same when given an object with 0.', () => {
+    
+    const newVote = {
+      inc_votes: 0
+    }
+    
+    return request(app)
+    .patch("/api/reviews/1")
+    .send(newVote)
+    .expect(200)
+    .then(({body}) => {
+      expect(body.review).toMatchObject({
+        review_id: 1,
+        title: expect.any(String),
+        designer: expect.any(String),
+        owner: expect.any(String),
+        review_img_url: expect.any(String),
+        review_body: expect.any(String),
+        category: expect.any(String),
+        created_at: expect.any(String),
+        votes: 1,
+      });
+    })
+  })
+  test('votes increment by 1 ', () => {
+    
+    const newVote = {
+      inc_votes: 1
+    }
+    
+    return request(app)
+    .patch("/api/reviews/1")
+    .send(newVote)
+    .expect(200)
+    .then(({body}) => {
+      expect(body.review).toMatchObject({
+        review_id: 1,
+        title: expect.any(String),
+        designer: expect.any(String),
+        owner: expect.any(String),
+        review_img_url: expect.any(String),
+        review_body: expect.any(String),
+        category: expect.any(String),
+        created_at: expect.any(String),
+        votes: 2,
+      });
+    })
+  })
+  test('responds with 400 when non datatype request is made', () => {
+    
+    const newVote = {
+      inc_votes: 1
+    }
+    
+    return request(app)
+    .patch("/api/reviews/nonsense")
+    .send(newVote)
+    .expect(400)
+    .then(({body}) => {
+      expect(body.msg).toBe('bad request!')
+    })
+  })
+  test('responds with 404 when review id does not exist', () => {
+    
+    const newVote = {
+      inc_votes: 1
+    }
+    
+    return request(app)
+    .patch("/api/reviews/999")
+    .send(newVote)
+    .expect(404)
+    .then(({body}) => {
+      expect(body.msg).toBe('Invalid review id given')
+    })
+  })
+
 })
+
+
+
+
