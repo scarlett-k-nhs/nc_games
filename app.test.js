@@ -194,7 +194,7 @@ describe('postComment', () => {
     return request(app)
     .post("/api/reviews/1/comments")
     .send(testComment)
-    .expect(404)
+    .expect(400)
       .then(({body}) => {
         expect(body.msg).toBe('information given by the object is not the right data type')
       });
@@ -209,9 +209,9 @@ describe('postComment', () => {
     return request(app)
     .post("/api/reviews/1/comments")
     .send(testComment)
-    .expect(404)
+    .expect(400)
       .then(({body}) => {
-        expect(body.msg).toBe('Invalid username given')
+        expect(body.msg).toBe('bad request!')
       });
   })
   

@@ -63,8 +63,6 @@ exports.fetchReviewsById = (review_id) => {
 exports.addComment = (newComment, review_id) => {
 
     return this.fetchReviewsById(review_id).then(() => {
-
-        return checkUsernames(newComment.username).then(() => {
             
             const {body, username} = newComment;
     
@@ -75,7 +73,7 @@ exports.addComment = (newComment, review_id) => {
                 })
             } else if (typeof body !== 'string' || typeof username !== 'string'){
                 return Promise.reject({
-                    status: 404,
+                    status: 400,
                     msg: "information given by the object is not the right data type"
                 })            
             } else {
@@ -87,7 +85,6 @@ exports.addComment = (newComment, review_id) => {
                     RETURNING *;
                 `, [body, review_id, username])
             }
-        })
         
     }).then((comment) => {
         return comment.rows
