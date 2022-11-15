@@ -55,11 +55,12 @@ describe('getReviewsById', () => {
       .expect(200)
       .then(({body}) => {
         expect(body.review).toMatchObject({
-          review_id: expect.any(Number),
+          review_id: 1,
           title: expect.any(String),
           designer: expect.any(String),
           owner: expect.any(String),
           review_img_url: expect.any(String),
+          review_body: expect.any(String),
           category: expect.any(String),
           created_at: expect.any(String),
           votes: expect.any(Number),
