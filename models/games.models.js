@@ -58,3 +58,23 @@ exports.fetchReviewsById = (review_id) => {
         }
     })
 }
+
+exports.addComment = (newComment, review_id) => {
+
+    return this.fetchReviewsById(review_id).then(() => {
+
+        const {body, username} = newComment;
+        
+        return db.query(`
+            INSERT INTO comments
+                (body, review_id, author)
+            VALUES
+                ($1, $2, $3)
+            RETURNING *;
+        `, [body, review_id, username])
+    }). then ((comment) => {
+        return comment.rows
+    })
+
+
+}

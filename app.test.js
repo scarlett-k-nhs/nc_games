@@ -102,7 +102,7 @@ describe('getReviewsById', () => {
   test("Responds with 404 when the wrong datatype is given for reviewid", () => {
     return request(app)
       .get("/api/reviews/nonsense")
-      .expect(400)
+      .expect(404)
       .then(({body}) => {
         expect(body.msg).toBe('bad request!')
       });
@@ -116,4 +116,59 @@ describe('getReviewsById', () => {
       });
   });
 
+})
+
+describe('postComment', () => {
+  test('Responds with 201 and returns with new comment object at the top ', () => {
+    
+    const testComment = {
+      username: 'mallionaire',
+      body:'some comment'
+    }
+    
+    return request(app)
+    .post("/api/reviews/1/comments")
+    .send(testComment)
+    .expect(201)
+    .then(({body}) => {
+      expect(body.comment[0]).toMatchObject({
+        comment_id: expect.any(Number),
+        body:'some comment',
+        review_id:1,
+        author:'mallionaire',
+        votes: 0,
+        created_at: expect.any(String)        
+      });
+    })
+  })
+  test("Responds with 404 when the wrong datatype is given for reviewid", () => {
+    const testComment = {
+      username: 'mallionaire',
+      body:'some comment'
+    }
+    
+    return request(app)
+    .post("/api/reviews/nonsense/comments")
+    .send(testComment)
+    .expect(404)
+      .then(({body}) => {
+        expect(body.msg).toBe('bad request!')
+      });
+  });
+  test("Responds with 400 and invalid review_id given", () => {
+    const testComment = {
+      username: 'mallionaire',
+      body:'some comment'
+    }
+    
+    return request(app)
+    .post("/api/reviews/999/comments")
+    .send(testComment)
+    .expect(400)
+      .then(({body}) => {
+        expect(body.msg).toBe('Invalid review id given')
+      });
+  });
+  
+  
 })

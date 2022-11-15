@@ -1,6 +1,7 @@
 const {fetchCategories,
        fetchReviewsById,
-       fetchReviews} = require("../models/games.models");
+       fetchReviews,
+       addComment} = require("../models/games.models");
 
 
 exports.getCategories = (req, res, next) => {
@@ -30,5 +31,17 @@ exports.getReviews = (req, res, next) => {
     }).catch((err) => {
         next(err);
     });
+}
+
+exports.postComment = (req, res, next) => {
+    
+    const newComment = req.body;
+    const {review_id} = req.params;
+
+    addComment(newComment, review_id).then((comment) => {
+        res.status(201).send({comment});
+    }).catch((err) => {
+        next(err);
+    });    
 }
 
