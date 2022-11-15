@@ -34,6 +34,7 @@ exports.fetchReviews = () => {
         return reviews.rows.map((review) => {
             review.comment_count = Number(review.comment_count),
             review.created_at = Date(review.created_at)
+            return review;
         })
     })
 }

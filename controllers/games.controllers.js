@@ -1,5 +1,5 @@
 const {fetchCategories,
-       fetchReviewsById} = require("../models/games.models");
+       fetchReviewsById,
        fetchReviews} = require("../models/games.models");
 
 
