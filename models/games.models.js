@@ -1,4 +1,5 @@
 const db = require("../db/connection.js");
+const {checkUsernames} = require("../db/seeds/utils")
 
 exports.fetchCategories = () => {
 
@@ -58,6 +59,37 @@ exports.fetchReviewsById = (review_id) => {
         }
     })
 }
+
+exports.addComment = (newComment, review_id) => {
+
+    return this.fetchReviewsById(review_id).then(() => {
+            
+            const {body, username} = newComment;
+    
+            if (body === undefined || username === undefined){
+                return Promise.reject({
+                    status: 400,
+                    msg: "bad request as keys are missing"
+                })
+            } else if (typeof body !== 'string' || typeof username !== 'string'){
+                return Promise.reject({
+                    status: 400,
+                    msg: "information given by the object is not the right data type"
+                })            
+            } else {
+                return db.query(`
+                    INSERT INTO comments
+                        (body, review_id, author)
+                    VALUES
+                        ($1, $2, $3)
+                    RETURNING *;
+                `, [body, review_id, username])
+            }
+        
+    }).then((comment) => {
+        return comment.rows
+    })
+
 
 exports.fetchCommentsByReviewId = (review_id) => {
     return this.fetchReviewsById(review_id)

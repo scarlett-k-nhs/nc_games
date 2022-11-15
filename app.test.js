@@ -118,6 +118,40 @@ describe('getReviewsById', () => {
 
 })
 
+describe('postComment', () => {
+  test('Responds with 201 and returns with new comment object at the top ', () => {
+    
+    const testComment = {
+      username: 'mallionaire',
+      body:'some comment'
+    }
+    
+    return request(app)
+    .post("/api/reviews/1/comments")
+    .send(testComment)
+    .expect(201)
+    .then(({body}) => {
+      expect(body.comment[0]).toMatchObject({
+        comment_id: expect.any(Number),
+        body:'some comment',
+        review_id:1,
+        author:'mallionaire',
+        votes: 0,
+        created_at: expect.any(String)        
+      });
+    })
+  })
+  test("Responds with 404 when the wrong datatype is given for reviewid", () => {
+    const testComment = {
+      username: 'mallionaire',
+      body:'some comment'
+    }
+    
+    return request(app)
+    .post("/api/reviews/nonsense/comments")
+    .send(testComment)
+    .expect(400)
+
 describe('getCommentsByReviewId', () => {
   test('get an array of comments for a given review id with correct properties', () => {
     return request(app)
@@ -152,6 +186,18 @@ describe('getCommentsByReviewId', () => {
         expect(body.msg).toBe('bad request!')
       });
   });
+
+  test("Responds with 400 and invalid review_id given", () => {
+    const testComment = {
+      username: 'mallionaire',
+      body:'some comment'
+    }
+    
+    return request(app)
+    .post("/api/reviews/999/comments")
+    .send(testComment)
+    .expect(404)
+
   test("Responds with 404 and invalid review_id given", () => {
     return request(app)
       .get("/api/reviews/999/comments")
@@ -160,4 +206,52 @@ describe('getCommentsByReviewId', () => {
         expect(body.msg).toBe('Invalid review id given')
       });
   });
+
+  test('check that the keys needed in the object are given', () => {
+    
+    const testComment = {
+      username:'mallionaire'
+    }
+    
+    return request(app)
+    .post("/api/reviews/1/comments")
+    .send(testComment)
+    .expect(400)
+      .then(({body}) => {
+        expect(body.msg).toBe('bad request as keys are missing')
+      });
+  })
+  test('check that the keys are the correct datatype', () => {
+    
+    const testComment = {
+      username: 'mallionaire',
+      body: 5
+    }
+    
+    return request(app)
+    .post("/api/reviews/1/comments")
+    .send(testComment)
+    .expect(400)
+      .then(({body}) => {
+        expect(body.msg).toBe('information given by the object is not the right data type')
+      });
+  })
+  test("provides error when username given doesn't exist", () => {
+    
+    const testComment = {
+      username: 'testa',
+      body: 'some commennt'
+    }
+    
+    return request(app)
+    .post("/api/reviews/1/comments")
+    .send(testComment)
+    .expect(400)
+      .then(({body}) => {
+        expect(body.msg).toBe('bad request!')
+      });
+  })
+  
 })
+})
+
