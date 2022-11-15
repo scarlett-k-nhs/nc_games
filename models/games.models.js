@@ -91,4 +91,15 @@ exports.addComment = (newComment, review_id) => {
     })
 
 
+exports.fetchCommentsByReviewId = (review_id) => {
+    return this.fetchReviewsById(review_id)
+        .then(() => {
+            return db.query(
+                `SELECT * FROM comments
+                 WHERE review_id = $1;`, [review_id]
+            );
+    })
+    .then((comments) => {
+        return comments.rows
+    })
 }
