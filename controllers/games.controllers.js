@@ -1,5 +1,7 @@
 const {fetchCategories,
        fetchReviewsById} = require("../models/games.models");
+       fetchReviews} = require("../models/games.models");
+
 
 exports.getCategories = (req, res, next) => {
 
@@ -20,3 +22,13 @@ exports.getReviewsById = (req, res, next) => {
         next(err);
     });
 };
+
+exports.getReviews = (req, res, next) => {
+
+    fetchReviews().then((reviews) => {
+        res.send({reviews});
+    }).catch((err) => {
+        next(err);
+    });
+}
+
