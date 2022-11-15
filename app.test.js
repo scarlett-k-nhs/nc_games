@@ -80,3 +80,40 @@ describe('getReviews', () => {
     });
 })
 
+describe('getReviewsById', () => {
+  test("Responds with a review object with correct properties", () => {
+    return request(app)
+      .get("/api/reviews/1")
+      .expect(200)
+      .then(({body}) => {
+        expect(body.review).toMatchObject({
+          review_id: 1,
+          title: expect.any(String),
+          designer: expect.any(String),
+          owner: expect.any(String),
+          review_img_url: expect.any(String),
+          review_body: expect.any(String),
+          category: expect.any(String),
+          created_at: expect.any(String),
+          votes: expect.any(Number),
+        });
+      });
+  });
+  test("Responds with 404 when the wrong datatype is given for reviewid", () => {
+    return request(app)
+      .get("/api/reviews/nonsense")
+      .expect(400)
+      .then(({body}) => {
+        expect(body.msg).toBe('bad request!')
+      });
+  });
+  test("Responds with 400 and invalid review_id given", () => {
+    return request(app)
+      .get("/api/reviews/999")
+      .expect(400)
+      .then(({body}) => {
+        expect(body.msg).toBe('Invalid review id given')
+      });
+  });
+
+})
