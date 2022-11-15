@@ -48,7 +48,7 @@ exports.fetchReviewsById = (review_id) => {
 
         if (reviews.rows.length === 0){
             return Promise.reject({
-                status: 400,
+                status: 404,
                 msg:"Invalid review id given"
             })
         } else {

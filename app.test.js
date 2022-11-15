@@ -99,18 +99,18 @@ describe('getReviewsById', () => {
         });
       });
   });
-  test("Responds with 404 when the wrong datatype is given for reviewid", () => {
+  test("Responds with 400 when the wrong datatype is given for reviewid", () => {
     return request(app)
       .get("/api/reviews/nonsense")
-      .expect(404)
+      .expect(400)
       .then(({body}) => {
         expect(body.msg).toBe('bad request!')
       });
   });
-  test("Responds with 400 and invalid review_id given", () => {
+  test("Responds with 404 and invalid review_id given", () => {
     return request(app)
       .get("/api/reviews/999")
-      .expect(400)
+      .expect(404)
       .then(({body}) => {
         expect(body.msg).toBe('Invalid review id given')
       });
@@ -150,7 +150,7 @@ describe('postComment', () => {
     return request(app)
     .post("/api/reviews/nonsense/comments")
     .send(testComment)
-    .expect(404)
+    .expect(400)
       .then(({body}) => {
         expect(body.msg).toBe('bad request!')
       });
@@ -164,7 +164,7 @@ describe('postComment', () => {
     return request(app)
     .post("/api/reviews/999/comments")
     .send(testComment)
-    .expect(400)
+    .expect(404)
       .then(({body}) => {
         expect(body.msg).toBe('Invalid review id given')
       });
