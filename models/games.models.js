@@ -48,7 +48,7 @@ exports.fetchReviewsById = (review_id) => {
 
         if (reviews.rows.length === 0){
             return Promise.reject({
-                status: 400,
+                status: 404,
                 msg:"Invalid review id given"
             })
         } else {
@@ -56,5 +56,18 @@ exports.fetchReviewsById = (review_id) => {
             reviews.rows[0].created_at = new Date(dateStr)
             return reviews.rows[0]
         }
+    })
+}
+
+exports.fetchCommentsByReviewId = (review_id) => {
+    return this.fetchReviewsById(review_id)
+        .then(() => {
+            return db.query(
+                `SELECT * FROM comments
+                 WHERE review_id = $1;`, [review_id]
+            );
+    })
+    .then((comments) => {
+        return comments.rows
     })
 }

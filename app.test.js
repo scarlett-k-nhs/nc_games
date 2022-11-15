@@ -99,7 +99,7 @@ describe('getReviewsById', () => {
         });
       });
   });
-  test("Responds with 404 when the wrong datatype is given for reviewid", () => {
+  test("Responds with 400 when the wrong datatype is given for reviewid", () => {
     return request(app)
       .get("/api/reviews/nonsense")
       .expect(400)
@@ -107,13 +107,57 @@ describe('getReviewsById', () => {
         expect(body.msg).toBe('bad request!')
       });
   });
-  test("Responds with 400 and invalid review_id given", () => {
+  test("Responds with 404 and invalid review_id given", () => {
     return request(app)
       .get("/api/reviews/999")
-      .expect(400)
+      .expect(404)
       .then(({body}) => {
         expect(body.msg).toBe('Invalid review id given')
       });
   });
 
+})
+
+describe('getCommentsByReviewId', () => {
+  test('get an array of comments for a given review id with correct properties', () => {
+    return request(app)
+      .get("/api/reviews/2/comments")
+      .expect(200)
+      .then(({body}) => {
+        body.comments.forEach((comment) => {
+          expect(comment).toMatchObject({
+            comment_id: expect.any(Number),
+            votes:expect.any(Number),
+            created_at:expect.any(String),
+            author:expect.any(String),
+            body:expect.any(String),
+            review_id: 2
+        });
+        })
+    });
+  })
+  test('get an arempty array when no comments exist', () => {
+    return request(app)
+      .get("/api/reviews/1/comments")
+      .expect(200)
+      .then(({body}) => {
+        expect(body.comments.length).toBe(0);
+    });
+  })
+  test("Responds with 400 when the wrong datatype is given for reviewid", () => {
+    return request(app)
+      .get("/api/reviews/nonsense/comments")
+      .expect(400)
+      .then(({body}) => {
+        expect(body.msg).toBe('bad request!')
+      });
+  });
+  test("Responds with 404 and invalid review_id given", () => {
+    return request(app)
+      .get("/api/reviews/999/comments")
+      .expect(404)
+      .then(({body}) => {
+        expect(body.msg).toBe('Invalid review id given')
+      });
+  });
 })
