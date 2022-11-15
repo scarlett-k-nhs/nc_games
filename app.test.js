@@ -48,47 +48,7 @@ describe('getCategories', () => {
       });
 })
 
-// describe('getReviews', () => {
-//   test("Responds with an object containing an array of review objects", () => {
-//       return request(app)
-//         .get("/api/reviews")
-//         .expect(200)
-//         .then(({body}) => {
-//           expect(body.reviews).toEqual(expect.any(Array));
-//         });
-//     });
-//     test("Responds with review objects with correct properties", () => {
-//       return request(app)
-//         .get("/api/reviews")
-//         .expect(200)
-//         .then(({body}) => {
-//           expect(body.reviews.length).toBeGreaterThanOrEqual(0);
-//           body.reviews.forEach((review) => {
-//               expect(review).toMatchObject({
-//                   review_id: expect.any(Number),
-//                   title: expect.any(String),
-//                   designer: expect.any(String),
-//                   owner: expect.any(String),
-//                   review_img_url: expect.any(String),
-//                   category: expect.any(String),
-//                   created_at: expect.any(String),
-//                   votes: expect.any(Number),
-//                   comment_count: expect.any(Number)
-//               })
-//           })
-//         });
-//     });
-//     test("Responds with review objects ordered by date in descending", () => {
-//       return request(app)
-//         .get("/api/reviews")
-//         .expect(200)
-//         .then(({body}) => {
-//           expect(body.reviews).toBeSortedBy('created_at', {descending: true});
-//         });
-//     });
-// })
-
-describe.only('getReviewsById', () => {
+describe('getReviewsById', () => {
   test("Responds with a review object with correct properties", () => {
     return request(app)
       .get("/api/reviews/1")
