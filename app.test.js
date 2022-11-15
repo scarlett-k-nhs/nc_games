@@ -239,6 +239,33 @@ describe('patchReviewById', () => {
       expect(body.msg).toBe('Invalid review id given')
     })
   })
+  test('responds with 400 when inc_votes is not given', () => {
+    
+    const newVote = {
+    }
+    
+    return request(app)
+    .patch("/api/reviews/1")
+    .send(newVote)
+    .expect(400)
+    .then(({body}) => {
+      expect(body.msg).toBe('No inc_votes key has been given')
+    })
+  })
+  test('responds with 404 when inc_votes is not a number datatype', () => {
+    
+    const newVote = {
+      inc_votes: '97'
+    }
+    
+    return request(app)
+    .patch("/api/reviews/1")
+    .send(newVote)
+    .expect(404)
+    .then(({body}) => {
+      expect(body.msg).toBe('inc_votes needs to be a number')
+    })
+  })
 
 })
 
