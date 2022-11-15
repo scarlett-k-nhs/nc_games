@@ -34,7 +34,24 @@ exports.fetchReviews = () => {
         return reviews.rows.map((review) => {
             review.comment_count = Number(review.comment_count),
             review.created_at = Date(review.created_at)
-            return review;
         })
     })
 }
+
+// exports.fetchReviewsById = (review_id) => {
+
+//     return db.query(`
+//         SELECT * FROM reviews
+//         WHERE review_id = $1;
+//     `, [review_id]).then((reviews) => {
+
+//         if (reviews.rows.length === 0){
+//             return Promise.reject({
+//                 status: 400,
+//                 msg:"Invalid review id given"
+//             })
+//         } else {
+//             return reviews.rows[0]
+//         }
+//     })
+// }

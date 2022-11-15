@@ -49,15 +49,7 @@ describe('getCategories', () => {
 })
 
 describe('getReviews', () => {
-  test("Responds with an object containing an array of review objects", () => {
-      return request(app)
-        .get("/api/reviews")
-        .expect(200)
-        .then(({body}) => {
-          expect(body.reviews).toEqual(expect.any(Array));
-        });
-    });
-    test("Responds with review objects with correct properties", () => {
+    test("Responds with an array of review objects with correct properties", () => {
       return request(app)
         .get("/api/reviews")
         .expect(200)
