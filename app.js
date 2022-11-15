@@ -7,8 +7,6 @@ app.use(express.json());
 
 app.get('/api/categories', getCategories);
 
-//app.get('/api/revie/:review_idws', getRevieByIdws);
-
 app.get('/api/reviews/:review_id', getReviewsById);
 
 app.all("/*", (req, res) => {

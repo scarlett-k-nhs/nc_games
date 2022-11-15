@@ -22,6 +22,8 @@ exports.fetchReviewsById = (review_id) => {
                 msg:"Invalid review id given"
             })
         } else {
+            const dateStr = reviews.rows[0].created_at.toString()
+            reviews.rows[0].created_at = new Date(dateStr)
             return reviews.rows[0]
         }
     })
