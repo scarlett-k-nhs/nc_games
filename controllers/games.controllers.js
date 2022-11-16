@@ -1,6 +1,8 @@
 const {fetchCategories,
        fetchReviewsById,
        fetchReviews,
+       fetchCommentsByReviewId,
+       updateReviewById,
        addComment,
        fetchCommentsByReviewId} = require("../models/games.models");
 
@@ -52,6 +54,18 @@ exports.getCommentsByReviewId = (req, res, next) => {
 
     fetchCommentsByReviewId(review_id).then((comments) => {
         res.send({comments});
+    }).catch((err) => {
+        next(err);
+    });
+}
+
+exports.patchReviewById = (req, res, next) => {
+    
+    const {inc_votes}= req.body;
+    const {review_id} = req.params
+
+    updateReviewById(inc_votes, review_id).then((review) => {
+        res.send({review});
     }).catch((err) => {
         next(err);
     });
