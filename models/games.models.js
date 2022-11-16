@@ -136,3 +136,12 @@ exports.updateReviewById = (inc_votes, review_id) => {
         })
     }
 }
+
+exports.fetchUsers = () => {
+
+    return db.query(`
+        SELECT * FROM users;
+    `).then((users) => {
+        return users.rows;
+    })
+}
