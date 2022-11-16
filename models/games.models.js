@@ -1,5 +1,5 @@
 const db = require("../db/connection.js");
-//const {checkUsernames} = require("../db/seeds/utils")
+const {checkReviewsById} = require("../db/seeds/utils")
 
 exports.fetchCategories = () => {
 
@@ -43,10 +43,47 @@ exports.fetchReviews = () => {
 exports.fetchReviewsById = (review_id) => {
 
     return db.query(`
-        SELECT * FROM reviews
+        SELECT * FROM comments
         WHERE review_id = $1;
-    `, [review_id]).then((reviews) => {
+    `, [review_id]).then((comments) => {
 
+        if (comments.rows.length === 0){
+            return db.query(`
+            SELECT 
+                reviews.review_id as review_id,
+                reviews.title as title,
+                reviews.designer as designer,
+                reviews.owner as owner,
+                reviews.review_img_url AS review_img_url,
+                reviews.review_body AS review_body,
+                reviews.category AS category,
+                reviews.created_at AS created_at,
+                reviews.votes as votes,
+                0 AS comment_count
+            FROM reviews
+            WHERE review_id = $1;
+            `, [review_id])
+        } else {
+            return db.query(`
+            SELECT 
+                reviews.review_id as review_id,
+                reviews.title as title,
+                reviews.designer as designer,
+                reviews.owner as owner,
+                reviews.review_img_url AS review_img_url,
+                reviews.review_body AS review_body,
+                reviews.category AS category,
+                reviews.created_at AS created_at,
+                reviews.votes as votes,
+                COUNT(comments.review_id) AS comment_count
+            FROM reviews
+            INNER JOIN comments
+            ON comments.review_id = reviews.review_id
+            WHERE reviews.review_id = $1
+            GROUP BY reviews.review_id;
+            `, [review_id]);
+        }
+    }).then((reviews) => {
         if (reviews.rows.length === 0){
             return Promise.reject({
                 status: 404,
@@ -55,6 +92,8 @@ exports.fetchReviewsById = (review_id) => {
         } else {
             const dateStr = reviews.rows[0].created_at.toString()
             reviews.rows[0].created_at = new Date(dateStr)
+            reviews.rows[0].comment_count = Number(reviews.rows[0].comment_count)
+            console.log(reviews.rows)
             return reviews.rows[0]
         }
     })
@@ -62,7 +101,7 @@ exports.fetchReviewsById = (review_id) => {
 
 exports.addComment = (newComment, review_id) => {
 
-    return this.fetchReviewsById(review_id).then(() => {
+    return checkReviewsById(review_id).then(() => {
             
             const {body, username} = newComment;
     
@@ -93,7 +132,7 @@ exports.addComment = (newComment, review_id) => {
 
 
 exports.fetchCommentsByReviewId = (review_id) => {
-    return this.fetchReviewsById(review_id)
+    return checkReviewsById(review_id)
         .then(() => {
             return db.query(
                 `SELECT * FROM comments
