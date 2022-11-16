@@ -40,3 +40,19 @@ exports.formatComments = (comments, idLookup) => {
 // 		}
 //     })
 // }
+
+exports.checkReviewsById = (review_id) => {
+
+    return db.query(`
+        SELECT * FROM reviews
+        WHERE review_id = $1;
+    `, [review_id]).then((reviews) => {
+
+        if (reviews.rows.length === 0){
+            return Promise.reject({
+                status: 404,
+                msg:"Invalid review id given"
+            })
+        } 
+    })
+}
