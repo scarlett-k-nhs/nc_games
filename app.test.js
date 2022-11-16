@@ -151,6 +151,8 @@ describe('postComment', () => {
     .post("/api/reviews/nonsense/comments")
     .send(testComment)
     .expect(400)
+  });
+});
 
 describe('getCommentsByReviewId', () => {
   test('get an array of comments for a given review id with correct properties', () => {

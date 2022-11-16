@@ -1,5 +1,5 @@
 const db = require("../db/connection.js");
-const {checkUsernames} = require("../db/seeds/utils")
+//const {checkUsernames} = require("../db/seeds/utils")
 
 exports.fetchCategories = () => {
 
@@ -89,6 +89,7 @@ exports.addComment = (newComment, review_id) => {
     }).then((comment) => {
         return comment.rows
     })
+}
 
 
 exports.fetchCommentsByReviewId = (review_id) => {
