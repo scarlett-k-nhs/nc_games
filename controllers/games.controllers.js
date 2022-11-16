@@ -3,7 +3,8 @@ const {fetchCategories,
        fetchReviews,
        updateReviewById,
        addComment,
-       fetchCommentsByReviewId} = require("../models/games.models");
+       fetchCommentsByReviewId,
+       fetchUsers} = require("../models/games.models");
 
 exports.getCategories = (req, res, next) => {
 
@@ -65,6 +66,15 @@ exports.patchReviewById = (req, res, next) => {
 
     updateReviewById(inc_votes, review_id).then((review) => {
         res.send({review});
+    }).catch((err) => {
+        next(err);
+    });
+}
+
+exports.getUsers = (req, res, next) => {
+
+    fetchUsers().then((users) => {
+        res.send({users});
     }).catch((err) => {
         next(err);
     });
