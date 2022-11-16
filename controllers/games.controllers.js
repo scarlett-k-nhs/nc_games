@@ -1,7 +1,6 @@
 const {fetchCategories,
        fetchReviewsById,
        fetchReviews,
-       fetchCommentsByReviewId,
        updateReviewById,
        addComment,
        fetchCommentsByReviewId} = require("../models/games.models");

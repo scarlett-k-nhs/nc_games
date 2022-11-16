@@ -5,8 +5,7 @@ const {getCategories,
       getReviewsById,
       getCommentsByReviewId,
       patchReviewById,
-      postComment,
-      getCommentsByReviewId} = require("./controllers/games.controllers.js");
+      postComment} = require("./controllers/games.controllers.js");
 
 app.use(express.json());
 
