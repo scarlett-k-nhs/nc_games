@@ -1,5 +1,6 @@
 const db = require("../db/connection.js");
-//const {checkUsernames} = require("../db/seeds/utils")
+const { sort } = require("../db/data/test-data/categories.js");
+const {checkCategory} = require("../db/seeds/utils")
 
 exports.fetchCategories = () => {
 
@@ -10,33 +11,69 @@ exports.fetchCategories = () => {
     })
 }
 
-exports.fetchReviews = () => {
+exports.fetchReviews = (category, sort_by = 'created_at', order = 'desc') => {
 
-    return db.query(`
-    SELECT 
-        reviews.review_id as review_id,
-        reviews.title as title,
-        reviews.designer as designer,
-        reviews.owner as owner,
-        reviews.review_img_url AS review_img_url,
-        reviews.review_body AS body,
-        reviews.category AS category,
-        reviews.created_at AS created_at,
-        reviews.votes as votes,
-        COUNT(comments.review_id) AS comment_count
-    FROM reviews
-    INNER JOIN comments
-    ON comments.review_id = reviews.review_id
-    GROUP BY reviews.review_id
-    ORDER BY reviews.created_at DESC;
-
-    `).then((reviews) => {
-        
-        return reviews.rows.map((review) => {
-            review.comment_count = Number(review.comment_count),
-            review.created_at = Date(review.created_at)
-            return review;
+    if (!['asc', 'desc'].includes(order)){
+        return Promise.reject({
+            status: 400,
+            msg: 'invalid ordering must be asc or desc'
         })
+    }
+
+    validSortBys = ['created_at', 'review_id', 'title', 'designer',
+                    'owner', 'review_img_url', 'body', 'category',
+                    'votes', 'comment_count']
+    
+    if (!validSortBys.includes(sort_by)){
+        return Promise.reject({
+            status: 400,
+            msg: `cannot sort by ${sort_by}`
+        })
+    };
+    
+    valueArr = [];
+    let count = 1;
+    
+    let queryStr = `
+        SELECT 
+            reviews.review_id as review_id,
+            reviews.title as title,
+            reviews.designer as designer,
+            reviews.owner as owner,
+            reviews.review_img_url AS review_img_url,
+            reviews.review_body AS body,
+            reviews.category AS category,
+            reviews.created_at AS created_at,
+            reviews.votes as votes,
+            COUNT(comments.review_id) AS comment_count
+        FROM reviews
+        INNER JOIN comments
+        ON comments.review_id = reviews.review_id
+        `
+    if (category !== undefined){
+
+        queryStr += ` WHERE reviews.category = $${count}`
+        valueArr.push(category);
+        count++
+    }
+
+    queryStr += ` 
+        GROUP BY reviews.review_id
+        ORDER BY reviews.${sort_by} ${order};
+        `
+    return db.query(queryStr, valueArr).then((reviews) => {
+        if (reviews.rows.length === 0){
+            return Promise.reject({
+                status:400,
+                msg:'category filter request not found'
+            })
+        } else{
+            return reviews.rows.map((review) => {
+                review.comment_count = Number(review.comment_count),
+                review.created_at = Date(review.created_at)
+                return review;
+            })
+        }
     })
 }
 
