@@ -95,7 +95,7 @@ exports.updateReviewById = (inc_votes, review_id) => {
             if (reviews.rows.length === 0){
                 return Promise.reject({
                     status: 404,
-                    msg:"Invalid review id given"
+                    msg:"review id not found"
                 })
             } else {
                 return reviews.rows[0]

@@ -236,7 +236,7 @@ describe('patchReviewById', () => {
     .send(newVote)
     .expect(404)
     .then(({body}) => {
-      expect(body.msg).toBe('Invalid review id given')
+      expect(body.msg).toBe('review id not found')
     })
   })
   test('responds with 400 when inc_votes is not given', () => {
@@ -255,7 +255,7 @@ describe('patchReviewById', () => {
   test('responds with 404 when inc_votes is not a number datatype', () => {
     
     const newVote = {
-      inc_votes: '97'
+      inc_votes: 'word'
     }
     
     return request(app)
