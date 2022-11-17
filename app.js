@@ -6,7 +6,8 @@ const {getCategories,
       getCommentsByReviewId,
       patchReviewById,
       postComment,
-      getUsers} = require("./controllers/games.controllers.js");
+      getUsers,
+      deleteComment} = require("./controllers/games.controllers.js");
 
 app.use(express.json());
 
@@ -22,7 +23,9 @@ app.get('/api/users', getUsers);
 
 app.post('/api/reviews/:review_id/comments', postComment)
 
-app.patch('/api/reviews/:review_id', patchReviewById)
+app.patch('/api/reviews/:review_id', patchReviewById);
+
+app.delete('/api/comments/:comment_id', deleteComment);
 
 
 app.all("/*", (req, res) => {

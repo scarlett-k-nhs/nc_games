@@ -404,4 +404,13 @@ describe('getUsers', () => {
     });
 })
 
+describe('deleteCommentsByCommentId', () => {
+  test("Responds with an array of user objects with correct properties", () => {
+    return request(app)
+      .delete("/api/comments/:comment_id")
+      .expect(204);
+  });
+})
+
+
 
