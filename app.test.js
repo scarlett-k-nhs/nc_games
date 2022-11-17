@@ -70,7 +70,7 @@ describe('getReviews', () => {
           })
         });
     });
-    test("Responds with an array of review objects where category = euro game", () => {
+    test("Responds with an array of review objects where category = dexterity", () => {
       return request(app)
         .get("/api/reviews?category=dexterity")
         .expect(200)
@@ -160,12 +160,12 @@ describe('getReviews', () => {
           expect(body.msg).toBe('cannot sort by nonexistent');
         });
     });
-    test("Responds with 400 if passed invalid category query string uppercase", () => {
+    test("Responds with 404 if passed a category that does not exist", () => {
       return request(app)
         .get("/api/reviews?category='nonexistent")
-        .expect(400)
+        .expect(404)
         .then(({body}) => {
-          expect(body.msg).toBe('category filter request not found');
+          expect(body.msg).toBe('category not found');
         });
     });
 })

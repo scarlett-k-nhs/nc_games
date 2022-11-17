@@ -36,15 +36,7 @@ exports.fetchReviews = (category, sort_by = 'created_at', order = 'desc') => {
     
     let queryStr = `
         SELECT 
-            reviews.review_id as review_id,
-            reviews.title as title,
-            reviews.designer as designer,
-            reviews.owner as owner,
-            reviews.review_img_url AS review_img_url,
-            reviews.review_body AS body,
-            reviews.category AS category,
-            reviews.created_at AS created_at,
-            reviews.votes as votes,
+            reviews.*,
             COUNT(comments.review_id) AS comment_count
         FROM reviews
         INNER JOIN comments
@@ -64,8 +56,8 @@ exports.fetchReviews = (category, sort_by = 'created_at', order = 'desc') => {
     return db.query(queryStr, valueArr).then((reviews) => {
         if (reviews.rows.length === 0){
             return Promise.reject({
-                status:400,
-                msg:'category filter request not found'
+                status:404,
+                msg:'category not found'
             })
         } else{
             return reviews.rows.map((review) => {
