@@ -23,6 +23,14 @@ describe('testing general request', () => {
   })
 })
 
+describe('getAPI', () => {
+  test('responds with an api JSON', () => {
+    return request(app)
+          .get("/api")
+          .expect(200);
+  })
+})
+
 describe('getCategories', () => {
     test("Responds with an object containing an array of category objects", () => {
         return request(app)

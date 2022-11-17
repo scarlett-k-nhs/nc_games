@@ -204,3 +204,8 @@ exports.removeComment = (comment_id) => {
         }
     })
 };
+
+exports.fetchAPI = () => {
+
+    
+}

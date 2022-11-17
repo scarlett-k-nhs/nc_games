@@ -7,9 +7,12 @@ const {getCategories,
       patchReviewById,
       postComment,
       getUsers,
-      deleteComment} = require("./controllers/games.controllers.js");
+      deleteComment,
+      getAPI} = require("./controllers/games.controllers.js");
 
 app.use(express.json());
+
+app.get('/api', getAPI);
 
 app.get('/api/categories', getCategories);
 

@@ -94,3 +94,12 @@ exports.deleteComment = (req, res, next) => {
     })
 }
 
+exports.getAPI= (req, res, next) => {
+
+    fetchAPI().then(({json}) => {
+        res.send(json);
+    }).catch((err) => {
+        next(err);
+    })
+}
+
