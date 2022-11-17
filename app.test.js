@@ -418,7 +418,7 @@ describe('deleteCommentsByCommentId', () => {
         expect(body.msg).toBe('bad request!')
       })
   });
-  test("Responds with 400 bad request if given a string input", () => {
+  test("Responds with 400 bad request if given a nonexistent id", () => {
     return request(app)
       .delete("/api/comments/999")
       .expect(404)
