@@ -1,6 +1,6 @@
 const db = require("../db/connection.js");
 const { sort } = require("../db/data/test-data/categories.js");
-const {checkCategory, checkReviewsById} = require("../db/seeds/utils")
+const {checkCategory, checkReviewsById} = require("../db/seeds/utils");
 
 exports.fetchCategories = () => {
 

@@ -6,6 +6,7 @@ const {fetchCategories,
        fetchCommentsByReviewId,
        fetchUsers,
        removeComment} = require("../models/games.models");
+const jsonObject = require("../endpoints.json");
 
 exports.getCategories = (req, res, next) => {
 
@@ -92,5 +93,10 @@ exports.deleteComment = (req, res, next) => {
     }).catch((err) => {
         next(err);
     })
+}
+
+exports.getAPI= (req, res, next) => {
+
+    res.send(jsonObject);
 }
 
