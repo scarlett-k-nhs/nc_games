@@ -494,4 +494,29 @@ describe('getUsers', () => {
     });
 })
 
+describe('deleteCommentsByCommentId', () => {
+  test("Responds with an array of user objects with correct properties", () => {
+    return request(app)
+      .delete("/api/comments/1")
+      .expect(204);
+  });
+  test("Responds with 400 bad request if given a string input", () => {
+    return request(app)
+      .delete("/api/comments/one")
+      .expect(400)
+      .then(({body}) => {
+        expect(body.msg).toBe('bad request!')
+      })
+  });
+  test("Responds with 400 bad request if given a nonexistent id", () => {
+    return request(app)
+      .delete("/api/comments/999")
+      .expect(404)
+      .then(({body}) => {
+        expect(body.msg).toBe('comment id not found')
+      })
+  });
+})
+
+
 
