@@ -83,7 +83,67 @@
         }
       ]
     }
+  }, 
+  "GET /api/users": {
+    "description": "serves an array of all reviews",
+    "queries": [],
+    "exampleResponse": {
+      "users": [
+        {
+          "username": "mallonaire",
+          "name": "haz",
+          "avatar_url":
+            "https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg"
+        }
+      ]
+    }
+  },
+  "POST /api/reviews/:review_id/comments": {
+    "description": "post a new comment to the given review id",
+    "queries": [],
+    "exampleInput":{
+      "username":"mallionaire",
+      "body":"some comment"
+    },
+    "exampleResponse": {
+      "comment": 
+        {
+          "comment_id": 6,
+          "votes": 0,
+          "created_at": 1511354613389,
+          "author":"bainesface",
+          "body":"I loved this game too!'",
+          "review_id": 2
+        }
+    }
+  },
+  "PATCH /api/reviews/:review_id": {
+    "description": "patches votes to increase by the value given",
+    "queries": [],
+    "exampleInput":{
+      "inc_votes":1
+    },
+    "exampleResponse": { 
+      "review":
+        {
+          "review_id": 2,
+          "title": "Jenga",
+          "designer": "Leslie Scott",
+          "owner": "philippaclaire9",
+          "review_img_url":
+            "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
+          "review_body": "Fiddly fun for all the family",
+          "category": "dexterity",
+          "created_at": 1610964101251,
+          "votes": 6,
+          "comment_count": 3
+        }
+    }
+  },
+  "DELETE /api/comments/:comment_id": {
+    "description": "deletes comment byt the comment id"
   }
+
   
 }
 

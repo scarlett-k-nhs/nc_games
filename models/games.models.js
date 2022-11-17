@@ -1,6 +1,7 @@
 const db = require("../db/connection.js");
 const { sort } = require("../db/data/test-data/categories.js");
 const {checkCategory, checkReviewsById} = require("../db/seeds/utils")
+const jsonObject = require("../endpoints.json");
 
 exports.fetchCategories = () => {
 
@@ -204,8 +205,3 @@ exports.removeComment = (comment_id) => {
         }
     })
 };
-
-exports.fetchAPI = () => {
-
-    
-}
