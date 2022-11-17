@@ -28,7 +28,9 @@ exports.getReviewsById = (req, res, next) => {
 
 exports.getReviews = (req, res, next) => {
 
-    fetchReviews().then((reviews) => {
+    const {category, sort_by, order} = req.query;
+
+    fetchReviews(category, sort_by, order).then((reviews) => {
         res.send({reviews});
     }).catch((err) => {
         next(err);

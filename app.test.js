@@ -70,12 +70,102 @@ describe('getReviews', () => {
           })
         });
     });
-    test("Responds with review objects ordered by date in descending", () => {
+    test("Responds with an array of review objects where category = dexterity", () => {
+      return request(app)
+        .get("/api/reviews?category=dexterity")
+        .expect(200)
+        .then(({body}) => {
+          expect(body.reviews.length).toBeGreaterThanOrEqual(0);
+          body.reviews.forEach((review) => {
+              expect(review).toMatchObject({
+                  review_id: expect.any(Number),
+                  title: expect.any(String),
+                  designer: expect.any(String),
+                  owner: expect.any(String),
+                  review_img_url: expect.any(String),
+                  category: 'dexterity',
+                  created_at: expect.any(String),
+                  votes: expect.any(Number),
+                  comment_count: expect.any(Number)
+              })
+          })
+        });
+    });
+    test("Responds with an array of review objects where category = social deduction", () => {
+      return request(app)
+        .get("/api/reviews?category=social deduction")
+        .expect(200)
+        .then(({body}) => {
+          expect(body.reviews.length).toBeGreaterThanOrEqual(0);
+          body.reviews.forEach((review) => {
+              expect(review).toMatchObject({
+                  review_id: expect.any(Number),
+                  title: expect.any(String),
+                  designer: expect.any(String),
+                  owner: expect.any(String),
+                  review_img_url: expect.any(String),
+                  category: 'social deduction',
+                  created_at: expect.any(String),
+                  votes: expect.any(Number),
+                  comment_count: expect.any(Number)
+              })
+          })
+        });
+    });
+    test("Responds with review objects ordered by date in descending by default", () => {
       return request(app)
         .get("/api/reviews")
         .expect(200)
         .then(({body}) => {
           expect(body.reviews).toBeSortedBy('created_at', {descending: true});
+        });
+    });
+    test("Responds with review objects ordered by votes", () => {
+      return request(app)
+        .get("/api/reviews?sort_by=votes")
+        .expect(200)
+        .then(({body}) => {
+          expect(body.reviews).toBeSortedBy('votes', {descending: true});
+        });
+    });
+    test("Responds with review objects ordered by votes in ascending", () => {
+      return request(app)
+        .get("/api/reviews?sort_by=votes&order=asc")
+        .expect(200)
+        .then(({body}) => {
+          expect(body.reviews).toBeSortedBy('votes');
+        });
+    });
+    test("Responds with 400 if passed invalid order query string uppercase", () => {
+      return request(app)
+        .get("/api/reviews?sort_by=votes&order=ASC")
+        .expect(400)
+        .then(({body}) => {
+          expect(body.msg).toBe('invalid ordering must be asc or desc');
+        });
+    });
+    test("Responds with 400 if passed invalid order query string general", () => {
+      return request(app)
+        .get("/api/reviews?sort_by=votes&order=ordernow")
+        .expect(400)
+        .then(({body}) => {
+          expect(body.msg).toBe('invalid ordering must be asc or desc');
+        });
+    });
+    test("Responds with 400 if passed invalid order query string uppercase", () => {
+      return request(app)
+        .get("/api/reviews?sort_by=nonexistent")
+        .expect(400)
+        .then(({body}) => {
+          expect(body.msg).toBe('cannot sort by nonexistent');
+        });
+    });
+    test("Responds with 404 if passed a category that does not exist", () => {
+      return request(app)
+        .get("/api/reviews?category='nonexistent")
+        .expect(404)
+        .then(({body}) => {
+          expect(body.msg).toBe('category not found');
         });
     });
 })

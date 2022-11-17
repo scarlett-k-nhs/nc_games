@@ -41,6 +41,23 @@ exports.formatComments = (comments, idLookup) => {
 //     })
 // }
 
+
+exports.checkCategory = (category) => {
+
+	return db.query(`
+		SELECT * FROM categories
+		WHERE category = $1`,
+		[category]
+	).then((categories) => {
+		if(categories.rows.length ===0){
+			return Promise.reject({
+				status: 404,
+				msg:"invalid category given"
+			})
+		}
+	})
+}
+
 exports.checkReviewsById = (review_id) => {
 
     return db.query(`
@@ -56,3 +73,4 @@ exports.checkReviewsById = (review_id) => {
         } 
     })
 }
+
