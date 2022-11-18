@@ -88,3 +88,9 @@ This endpoint will delete a comment
 The project was created using:
 * node --version | v10.19.0
 * psql --version | v12.12
+
+## Browser availible version:
+
+This can be accessed at:
+
+https://scarlett64-games-server.cyclic.app/api
