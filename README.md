@@ -88,5 +88,3 @@ This endpoint will delete a comment
 The project was created using:
 * node --version | v10.19.0
 * psql --version | v12.12
-
-
